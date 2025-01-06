@@ -6,6 +6,7 @@ from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.textinput import TextInput
 from instructions import *
+from ruffier import *
 
 class FirstScreen(Screen):
     def __init__(self, **kwargs):
@@ -54,9 +55,9 @@ class SecondScreen(Screen):
         self.add_widget(layout_v)
         button.on_press = self.next
     def next(self):
-        global age_result
+        global res1
         try:
-            age_result = int(self.result_amount.text)
+            res1 = int(self.result_amount.text)
             self.manager.current = 'Экран 3'
         except ValueError:
             self.result_amount.text = 'Пиши цифрами :/'
@@ -98,14 +99,14 @@ class ForthScreen(Screen):
         self.add_widget(layout_v)
         button.on_press = self.next
     def next(self):
-        global results, results_break
+        global res2, res3
         try:
-            results = int(self.result.text)
+            res2 = int(self.result.text)
         except ValueError:
             self.result.text = 'Пиши цифрами :/'
             return
         try:
-            results_break = int(self.result_after.text)
+            res3 = int(self.result_after.text)
             self.manager.current = 'Экран 5'
         except ValueError:
             self.result_after.text = 'Пиши цифрами :/'
@@ -114,7 +115,14 @@ class ForthScreen(Screen):
 class FivethScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
+        self.results = Label(text='')
+        layout_v = BoxLayout(orientation='vertical')
+        layout_v.add_widget(self.results)
+        self.add_widget(layout_v)
+        self.on_enter = self.before
+    def before(self):
+        res = test(res1, res2, res3, age)
+        self.results.text = res
 
 class MyApp(App):
     def build(self):
